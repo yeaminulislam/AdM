@@ -1,0 +1,6 @@
+{
+  "name": "AdManager",
+  "description": "An advanced web browser featuring a multi-threaded downloader, real-time media grabber, support for custom extension scripts, and deep customization options.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
