@@ -1,0 +1,43 @@
+name: Build Universal APK
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch: # Allows you to manually trigger the build from the Actions tab
+
+jobs:
+  build:
+    name: Build Universal APK
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout the repository code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Set up the correct Java environment (JDK 17 is standard for modern Android/Kotlin)
+      - name: Setup Java JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # 3. Setup Gradle (This bypasses the need for the missing ./gradlew file)
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.7' # Installs Gradle globally on the runner
+
+      # 4. Build the Universal APK
+      # We use 'gradle' instead of './gradlew' to ensure it works even if the local script is completely missing
+      - name: Build Debug Universal APK
+        run: gradle assembleDebug
+
+      # 5. Upload the compiled APK so you can download it from the GitHub Actions page
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Universal-Debug-APK
+          path: app/build/outputs/apk/debug/*.apk
